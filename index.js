@@ -78,11 +78,13 @@ newspapers.forEach((newsPaper) => {
     $('a:contains("Russia")', html).each(function () {
       const title = $(this).text();
       const url = $(this).attr("href");
+      const image = $(this).find("img").attr("src");
 
       articles.push({
         title,
         url: newsPaper.base + url,
         source: newsPaper.name,
+        image: image ? image : "no image...",
       });
     });
   });
@@ -116,10 +118,12 @@ app.get("/news/:newspaperId", (req, res) => {
       $('a:contains("Russia")', html).each(function () {
         const title = $(this).text();
         const url = $(this).attr("href");
+        const image = $(this).find("img").attr("src");
         specificArticles.push({
           title,
           url: newspaperBase + url,
           source: newspaperId,
+          image: image ? image : "no image...",
         });
       });
       res.json(specificArticles);
