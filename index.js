@@ -9,12 +9,12 @@ const newspapers = [
   {
     name: "thetimes",
     address: "https://www.thetimes.co.uk/#section-world",
-    base: "",
+    base: "https://www.thetimes.co.uk",
   },
   {
     name: "guardian",
     address: "https://www.theguardian.com/world",
-    base: "",
+    base: "https://www.theguardian.com",
   },
   {
     name: "telegraph",
@@ -24,12 +24,12 @@ const newspapers = [
   {
     name: "nyt",
     address: "https://www.nytimes.com/international/section/world",
-    base: "",
+    base: "https://www.nytimes.com",
   },
   {
     name: "latimes",
     address: "https://www.latimes.com/world-nation",
-    base: "",
+    base: "https://www.latimes.com",
   },
   {
     name: "smh",
@@ -49,23 +49,23 @@ const newspapers = [
   {
     name: "sun",
     address: "https://www.thesun.co.uk/news/worldnews/",
-    base: "",
+    base: "https://www.thesun.co.uk",
   },
   {
     name: "dm",
     address:
       "https://www.dailymail.co.uk/news/russia-ukraine-conflict/index.html",
-    base: "",
+    base: "https://www.dailymail.co.uk",
   },
   {
     name: "nyp",
     address: "https://nypost.com/news/",
-    base: "",
+    base: "https://nypost.com",
   },
   {
     name: "cityam",
     address: "https://www.cityam.com/news/",
-    base: "",
+    base: "https://www.cityam.com",
   },
 ];
 const articles = [];
@@ -82,7 +82,7 @@ newspapers.forEach((newsPaper) => {
 
       articles.push({
         title,
-        url: newsPaper.base + url,
+        url: url.includes("https") ? url : newsPaper.base + url,
         source: newsPaper.name,
         image: image ? image : "no image...",
       });
@@ -121,7 +121,7 @@ app.get("/news/:newspaperId", (req, res) => {
         const image = $(this).find("img").attr("src");
         specificArticles.push({
           title,
-          url: newspaperBase + url,
+          url: url.includes("https") ? url : newspaperBase + url,
           source: newspaperId,
           image: image ? image : "no image...",
         });
