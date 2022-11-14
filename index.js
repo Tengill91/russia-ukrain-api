@@ -70,16 +70,28 @@ const newspapers = [
 ];
 const articles = [];
 
+// för varje newspaper i newspaper listan hämta adressen och gör en (axios) get request för att hämta websidans html (innehåll)
+// lägger sedan in websidans inehåll med hjälp utav cheerio i en ($) variabel
 newspapers.forEach((newsPaper) => {
   axios.get(newsPaper.address).then((response) => {
     const html = response.data;
     const $ = cheerio.load(html);
 
+    // för varje "a tagg" (link) som innehåller Russia spara texten, url och bild
     $('a:contains("Russia")', html).each(function () {
       const title = $(this).text();
       const url = $(this).attr("href");
       const image = $(this).find("img").attr("src");
+      // const image = [];
+      // {
+      //   $(this).map(function () {
+      //     image.push($(this).find("img").attr("src"));
+      //   });
+      // }
 
+      // $('img').map(function(){ return $(this).attr('src'); })
+
+      // lägger sedan allt sammans i articles listan
       articles.push({
         title,
         url: url.includes("https") ? url : newsPaper.base + url,
@@ -90,14 +102,17 @@ newspapers.forEach((newsPaper) => {
   });
 });
 
+// sakapar en landnings sida på port 8000
 app.get("/", (req, res) => {
   res.json("Welcome to my Russia-Ukrain News API ");
 });
 
+// visar sedan upp alla artiklar på /news sidan (url)
 app.get("/news", (req, res) => {
   res.json(articles);
 });
 
+// en till sida för specifika nyhets sidor
 app.get("/news/:newspaperId", (req, res) => {
   const newspaperId = req.params.newspaperId;
 
@@ -119,6 +134,7 @@ app.get("/news/:newspaperId", (req, res) => {
         const title = $(this).text();
         const url = $(this).attr("href");
         const image = $(this).find("img").attr("src");
+
         specificArticles.push({
           title,
           url: url.includes("https") ? url : newspaperBase + url,
